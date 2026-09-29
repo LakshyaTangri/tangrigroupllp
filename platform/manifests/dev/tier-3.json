@@ -1,0 +1,27 @@
+{
+  "apiVersion": "platform.tangri/v1alpha1",
+  "kind": "EdgeVM",
+  "metadata": { "name": "tangri-edge-tier-3", "tier": "tier-3" },
+  "hardware": {
+    "architectures": ["amd64", "arm64"],
+    "accelerator": { "required": true, "type": "gpu" }
+  },
+  "vm": {
+    "vcpus": 8,
+    "memoryMiB": 16384,
+    "diskGiB": 128,
+    "persistentDataGiB": 64
+  },
+  "networks": {
+    "northbound": { "enabled": true, "dhcp": true },
+    "southbound": { "enabled": true, "isolated": true }
+  },
+  "image": {
+    "uri": "REPLACE_WITH_SIGNED_TANGRI_EDGE_IMAGE",
+    "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "passthrough": [
+    { "name": "inference-accelerator", "type": "gpu", "required": false },
+    { "name": "video-decoder", "type": "video-decode", "required": false }
+  ]
+}

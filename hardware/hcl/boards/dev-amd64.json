@@ -1,0 +1,16 @@
+{
+  "id": "dev-amd64",
+  "status": "candidate",
+  "architecture": "amd64",
+  "memoryMiB": 16384,
+  "network": { "northbound": 1, "southbound": 1 },
+  "tpm": true,
+  "accelerator": {
+    "type": "none",
+    "passthroughQualified": false
+  },
+  "eve": {
+    "architecture": "amd64",
+    "release": "17.0.0-lts"
+  }
+}

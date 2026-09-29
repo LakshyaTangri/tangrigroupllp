@@ -1,0 +1,24 @@
+{
+  "apiVersion": "platform.tangri/v1alpha1",
+  "kind": "EdgeVM",
+  "metadata": { "name": "tangri-edge-tier-2", "tier": "tier-2" },
+  "hardware": {
+    "architectures": ["amd64", "arm64"],
+    "accelerator": { "required": false, "type": "none" }
+  },
+  "vm": {
+    "vcpus": 4,
+    "memoryMiB": 8192,
+    "diskGiB": 64,
+    "persistentDataGiB": 32
+  },
+  "networks": {
+    "northbound": { "enabled": true, "dhcp": true },
+    "southbound": { "enabled": true, "isolated": true }
+  },
+  "image": {
+    "uri": "REPLACE_WITH_SIGNED_TANGRI_EDGE_IMAGE",
+    "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "passthrough": []
+}

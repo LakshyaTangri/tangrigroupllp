@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tangri.in/schemas/l2/tangri-edge-vm.schema.json",
+  "title": "Tangri Edge VM Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "hardware", "vm", "networks", "image"],
+  "properties": {
+    "apiVersion": { "const": "platform.tangri/v1alpha1" },
+    "kind": { "const": "EdgeVM" },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "tier"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "tier": { "type": "string", "enum": ["tier-1", "tier-2", "tier-3"] }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architectures"],
+      "properties": {
+        "architectures": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["amd64", "arm64"] },
+          "minItems": 1
+        },
+        "accelerator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "type": { "type": "string", "enum": ["none", "gpu", "npu"] }
+          }
+        }
+      }
+    },
+    "vm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vcpus", "memoryMiB", "diskGiB"],
+      "properties": {
+        "vcpus": { "type": "integer", "minimum": 1 },
+        "memoryMiB": { "type": "integer", "minimum": 512 },
+        "diskGiB": { "type": "integer", "minimum": 8 },
+        "persistentDataGiB": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "networks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["northbound", "southbound"],
+      "properties": {
+        "northbound": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": { "const": true },
+            "dhcp": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "southbound": {
+          "type": "object",
+          "required": ["enabled", "isolated"],
+          "properties": {
+            "enabled": { "const": true },
+            "isolated": { "const": true }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "digest"],
+      "properties": {
+        "uri": { "type": "string", "minLength": 1 },
+        "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "passthrough": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["pci", "usb", "serial", "gpu", "npu", "video-decode"] },
+          "required": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
