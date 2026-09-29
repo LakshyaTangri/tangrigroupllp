@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tangri.in/schemas/hardware/board-profile.schema.json",
+  "title": "Tangri Board Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "status", "architecture", "memoryMiB", "network", "eve"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "status": { "type": "string", "enum": ["candidate", "qualified", "deprecated"] },
+    "architecture": { "type": "string", "enum": ["amd64", "arm64"] },
+    "memoryMiB": { "type": "integer", "minimum": 1024 },
+    "network": {
+      "type": "object",
+      "required": ["northbound", "southbound"],
+      "additionalProperties": false,
+      "properties": {
+        "northbound": { "type": "integer", "minimum": 1 },
+        "southbound": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "tpm": { "type": "boolean" },
+    "accelerator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "passthroughQualified"],
+      "properties": {
+        "type": { "type": "string", "enum": ["none", "gpu", "npu"] },
+        "passthroughQualified": { "type": "boolean" },
+        "runtime": { "type": "string" }
+      }
+    },
+    "eve": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architecture", "release"],
+      "properties": {
+        "architecture": { "type": "string" },
+        "release": { "type": "string" }
+      }
+    }
+  }
+}
