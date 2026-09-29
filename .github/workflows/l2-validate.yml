@@ -1,0 +1,32 @@
+name: L2 Validation
+
+on:
+  pull_request:
+    paths:
+      - "platform/**"
+      - "hardware/hcl/**"
+      - ".github/workflows/l2-validate.yml"
+  push:
+    branches:
+      - main
+      - "feature/**"
+    paths:
+      - "platform/**"
+      - "hardware/hcl/**"
+      - ".github/workflows/l2-validate.yml"
+
+jobs:
+  validate-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: python -m pip install -r platform/manifests/requirements.txt
+
+      - name: Validate L2 manifests
+        run: python platform/manifests/validate.py
